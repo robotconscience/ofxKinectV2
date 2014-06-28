@@ -106,6 +106,11 @@ ofPixels ofxKinectV2::getDepthPixels(){
 }
 
 //--------------------------------------------------------------------------------
+ofFloatPixels & ofxKinectV2::getRawDepthPixels(){
+    return rawDepthPixels;
+}
+
+//--------------------------------------------------------------------------------
 ofPixels ofxKinectV2::getRgbPixels(){
     return rgbPix; 
 }

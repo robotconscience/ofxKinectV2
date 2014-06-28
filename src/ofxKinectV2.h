@@ -25,7 +25,7 @@ class ofxKinectV2 : public ofThread{
     
         ofPixels getDepthPixels();
         ofPixels getRgbPixels();
-        ofFloatPixels getRawDepthPixels();
+        ofFloatPixels & getRawDepthPixels();
     
         ofParameter <float> minDistance;
         ofParameter <float> maxDistance;
