@@ -843,12 +843,16 @@ int ofProtonect::openKinect(std::string binpath){
 
   depth_iso_transfers = new libfreenect2::usb::IsoTransferPool(handle, 0x84);
   
-  depth_processor = new libfreenect2::CpuDepthPacketProcessor();
+//  depth_processor = new libfreenect2::CpuDepthPacketProcessor();
+//  depth_processor->setFrameListener(frame_listener);
+//  depth_processor->load11To16LutFromFile((binpath + "11to16.bin").c_str());
+//  depth_processor->loadXTableFromFile((binpath + "xTable.bin").c_str());
+//  depth_processor->loadZTableFromFile((binpath + "zTable.bin").c_str());
+    
+  depth_processor = new libfreenect2::ofGpuDepthPacketProcessor();
   depth_processor->setFrameListener(frame_listener);
-  depth_processor->load11To16LutFromFile((binpath + "11to16.bin").c_str());
-  depth_processor->loadXTableFromFile((binpath + "xTable.bin").c_str());
-  depth_processor->loadZTableFromFile((binpath + "zTable.bin").c_str());
-
+  depth_processor->start();
+    
   depth_packet_stream_parser = new libfreenect2::DepthPacketStreamParser(depth_processor); 
 
   size_t max_packet_size = libusb_get_max_iso_packet_size(dev, 0x84);
@@ -884,7 +888,7 @@ void ofProtonect::exit(ofEventArgs & args){
     closeKinect();
 }
 
-void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels){
+void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels, ofFloatPixels & irPixels){
     if( bOpened ){
         
         ofLogVerbose() << " updateKinect " << endl;
@@ -899,6 +903,7 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         
         rgbPixels.setFromPixels(rgb->data, rgb->width, rgb->height, 3);
         depthPixels.setFromPixels((float *)depth->data, ir->width, ir->height, 1);
+        irPixels.setFromPixels((float *)ir->data, ir->width, ir->height, 1);
 
         frame_listener->release(frames);
   }
@@ -917,8 +922,8 @@ int ofProtonect::closeKinect(){
 
     rgb_bulk_transfers->cancel();
     depth_iso_transfers->cancel();
-    
-
+    depth_processor->stop();
+     
     CloseKinect(handle);
 
     // wait for all transfers to cancel
