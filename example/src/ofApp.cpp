@@ -22,6 +22,7 @@ void ofApp::update(){
     kinect.update();
     if( kinect.isFrameNew() ){
         texDepth.loadData( kinect.getDepthPixels() );
+        texIr.loadData( kinect.getRawIrPixels() );
         texRGB.loadData( kinect.getRgbPixels() );
     }
 }
@@ -31,6 +32,7 @@ void ofApp::draw(){
     ofDrawBitmapString("ofxKinectV2: Work in progress addon.\nBased on the excellent work by the OpenKinect libfreenect2 team\n\n-Only supports one Kinect v2 at a time. \n-Requires USB 3.0 port ( superspeed )\n-Requires patched libusb. If you have the libusb from ofxKinect ( v1 ) linked to your project it will prevent superspeed on Kinect V2", 10, 14);
     
     texDepth.draw(10, 100);
+    texIr.draw(600, 100);
     texRGB.draw(10, 110 + texDepth.getHeight(), 1920/4, 1080/4);
     
     panel.draw();

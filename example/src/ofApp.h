@@ -27,5 +27,6 @@ class ofApp : public ofBaseApp{
     
         ofxKinectV2 kinect;
         ofTexture texDepth;
-        ofTexture texRGB; 
+        ofTexture texIr;
+        ofTexture texRGB;
 };
