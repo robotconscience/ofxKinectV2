@@ -25,10 +25,10 @@ void ofApp::setup(){
 //    panel.add(depthLeft);
 //    panel.add(depthRight);
     panel.loadFromFile("settings.xml");
-
-    kinect.open();
     
-    pointCloudShader.load("shaders/pointCloud");
+    pointCloudShader.load("shader/pointCloud");
+    
+    kinect.open();
     
     camera.setPosition(ofGetWidth()/2.0, ofGetHeight()/2.0, 700.0);
     camera.roll(180.0);

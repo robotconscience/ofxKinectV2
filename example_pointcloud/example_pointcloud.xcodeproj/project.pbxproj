@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01D8029519D099940032DFB8 /* ofGpuDepthPacketProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D8029319D099940032DFB8 /* ofGpuDepthPacketProcessor.cpp */; };
+		01D8029A19D09A280032DFB8 /* ofxOpenGLContextScope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01D8029819D09A280032DFB8 /* ofxOpenGLContextScope.cpp */; };
 		03207F0DB78E7E3C3855D0DE /* rgb_packet_processor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5386CD7D987A1191E39E8182 /* rgb_packet_processor.cpp */; };
 		10B69DE456AED1288FC9316B /* Tracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A810DF70319A10353588F5DB /* Tracker.cpp */; };
 		169D3C72FDE6C5590A1616F5 /* ofxCvFloatImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B6A03390302D5A2C9F0E4AB /* ofxCvFloatImage.cpp */; };
@@ -101,9 +103,11 @@
 
 /* Begin PBXFileReference section */
 		011E372AEA4DFBC1A32C2851 /* all_indices.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = all_indices.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/all_indices.h; sourceTree = SOURCE_ROOT; };
-		01628CE0195F3F1E0019BD69 /* pointCloud.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = pointCloud.frag; sourceTree = "<group>"; };
-		01628CE1195F3F1E0019BD69 /* pointCloud.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = pointCloud.vert; sourceTree = "<group>"; };
 		0173A3F435DECD5A4DDE0B8E /* logger.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = logger.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/logger.h; sourceTree = SOURCE_ROOT; };
+		01D8029319D099940032DFB8 /* ofGpuDepthPacketProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofGpuDepthPacketProcessor.cpp; path = ../libs/protonect/ofGpuDepthPacketProcessor.cpp; sourceTree = "<group>"; };
+		01D8029419D099940032DFB8 /* ofGpuDepthPacketProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofGpuDepthPacketProcessor.h; path = ../libs/protonect/ofGpuDepthPacketProcessor.h; sourceTree = "<group>"; };
+		01D8029819D09A280032DFB8 /* ofxOpenGLContextScope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOpenGLContextScope.cpp; sourceTree = "<group>"; };
+		01D8029919D09A280032DFB8 /* ofxOpenGLContextScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOpenGLContextScope.h; sourceTree = "<group>"; };
 		01DAE5C2E3E0A74207B2BE49 /* saving.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = saving.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/saving.h; sourceTree = SOURCE_ROOT; };
 		03A75A648BC4CF1D9DEDD0CE /* Flow.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Flow.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Flow.cpp; sourceTree = SOURCE_ROOT; };
 		057122A817D12571F8C0C7A4 /* ofxCvGrayscaleImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvGrayscaleImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvGrayscaleImage.cpp; sourceTree = SOURCE_ROOT; };
@@ -342,14 +346,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01628CDF195F3F1E0019BD69 /* shaders */ = {
+		01D8029619D09A200032DFB8 /* ofxOpenGLContextScope */ = {
 			isa = PBXGroup;
 			children = (
-				01628CE0195F3F1E0019BD69 /* pointCloud.frag */,
-				01628CE1195F3F1E0019BD69 /* pointCloud.vert */,
+				01D8029719D09A280032DFB8 /* src */,
 			);
-			name = shaders;
-			path = bin/data/shaders;
+			name = ofxOpenGLContextScope;
+			sourceTree = "<group>";
+		};
+		01D8029719D09A280032DFB8 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				01D8029819D09A280032DFB8 /* ofxOpenGLContextScope.cpp */,
+				01D8029919D09A280032DFB8 /* ofxOpenGLContextScope.h */,
+			);
+			name = src;
+			path = ../../ofxOpenGLContextScope/src;
 			sourceTree = "<group>";
 		};
 		0478E60892BF4C0731AE0763 /* ts */ = {
@@ -651,6 +663,8 @@
 		829924D1AFD56F167390B293 /* protonect */ = {
 			isa = PBXGroup;
 			children = (
+				01D8029319D099940032DFB8 /* ofGpuDepthPacketProcessor.cpp */,
+				01D8029419D099940032DFB8 /* ofGpuDepthPacketProcessor.h */,
 				F19AD2D393AFFBAD86CE5EB7 /* include */,
 				B0109750A0D3C797152FA9FA /* ofProtonect.cpp */,
 				A36C0BDB05E24D11E762022B /* ofProtonect.h */,
@@ -810,6 +824,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				01D8029619D09A200032DFB8 /* ofxOpenGLContextScope */,
 				480A780D8D0308AE4A368801 /* ofxGui */,
 				A0B90D3B0ADB9C1716816714 /* ofxOpenCv */,
 				6025FAF6414C2CA589764D26 /* ofxCv */,
@@ -944,7 +959,6 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				01628CDF195F3F1E0019BD69 /* shaders */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -1114,9 +1128,11 @@
 				E212C821D1064B92DD953A42 /* ofxCvHaarFinder.cpp in Sources */,
 				63020F16C7E8DED980111241 /* ofxCvImage.cpp in Sources */,
 				D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */,
+				01D8029A19D09A280032DFB8 /* ofxOpenGLContextScope.cpp in Sources */,
 				B6840996567E78436F7ECFAB /* ETF.cpp in Sources */,
 				F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */,
 				EBCDE831EFAE08274E799C97 /* Calibration.cpp in Sources */,
+				01D8029519D099940032DFB8 /* ofGpuDepthPacketProcessor.cpp in Sources */,
 				6AABAB39E82AF5CFEA23A205 /* ContourFinder.cpp in Sources */,
 				45CC483A999BF1065A6B926C /* Distance.cpp in Sources */,
 				5CC34D433F5806179935B89D /* Flow.cpp in Sources */,

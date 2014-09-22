@@ -1,6 +1,15 @@
-#version 120
-#extension GL_EXT_gpu_shader4 : enable
-#extension GL_ARB_texture_rectangle : enable
+#version 150
+
+// these come from the programmable pipeline
+uniform mat4 modelViewProjectionMatrix;
+
+in vec4 position;
+in vec2 texcoord;
+in vec4 color;
+out vec4 out_color;
+
+// texture coordinates are sent to fragment shader
+out vec2 texCoordVarying;
 
 uniform sampler2DRect kinectDepth;
 
@@ -24,14 +33,14 @@ float ofMap(float value, float inputMin, float inputMax, float outputMin, float 
 }
 
 
-varying vec4 position;
+out vec4 point_position;
 
 void main() {
-    gl_TexCoord[0] = gl_MultiTexCoord0;
-	position = gl_Vertex;
-    float z = ofMap(texture2DRect(kinectDepth, gl_TexCoord[0].st).x, 0.0, 1.0, 0.0, depth, true );
-    position.z = z;
+    texCoordVarying = texcoord;
+	point_position = position;
+    float z = ofMap(texture(kinectDepth, texCoordVarying.st).x, 0.0, 1.0, 0.0, depth, true );
+    point_position.z = z;
     
-    gl_Position = gl_ModelViewProjectionMatrix * position;
-    gl_FrontColor = gl_Color;
+    gl_Position = modelViewProjectionMatrix * point_position;
+    out_color = color;
 }

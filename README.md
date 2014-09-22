@@ -16,6 +16,7 @@ Notes:
 - Only tested on OS X though Win / Nix should be possible too with patched libusb ( see: https://github.com/OpenKinect/libfreenect2/blob/master/depends/README.depends.txt ) 
 - If you have the ofxKinect ( v1 ) addon in your project remove the ofxKinect libusb lib and use the one that comes with this repo instead. 
 - Depth decoding is not at 30fps as it is decoded on the CPU - GPU decoding is possible, but not stable currently with OF. 
+- Note: GPU decoding by @hanasaan requires https://github.com/satoruhiga/ofxOpenGLContextScope
 
 
 Huge thanks to @christiankerl for a lot of the recent changes that made this work well on OS X. 
