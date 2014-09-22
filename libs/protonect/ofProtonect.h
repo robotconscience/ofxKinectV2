@@ -15,6 +15,7 @@
 #include <libfreenect2/depth_packet_stream_parser.h>
 #include <libfreenect2/frame_listener.h>
 #include "ofRGBPacketProcessor.h"
+#include "ofGpuDepthPacketProcessor.h"
 
 #include "ofAppGLFWWindow.h"
 #include "ofAppRunner.h"
@@ -26,7 +27,7 @@ class ofProtonect{
         ofProtonect();
     
         int openKinect(std::string dataPath);
-        void updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels);
+        void updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels, ofFloatPixels & irPixels);
         int closeKinect();
     
         void exit(ofEventArgs & args);
@@ -50,7 +51,8 @@ class ofProtonect{
 //        libfreenect2::usb::BulkTransferPool rgb_bulk_transfers(handle, 0x83);
 //        libfreenect2::RgbPacketStreamParser rgb_packet_stream_parser(&rgb_processor);
 
-        libfreenect2::CpuDepthPacketProcessor * depth_processor;
+//        libfreenect2::CpuDepthPacketProcessor * depth_processor;
+        libfreenect2::ofGpuDepthPacketProcessor * depth_processor;
         libfreenect2::usb::IsoTransferPool  * depth_iso_transfers;
 
 //        libfreenect2::usb::IsoTransferPool depth_iso_transfers(handle, 0x84);

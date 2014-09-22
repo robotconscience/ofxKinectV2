@@ -48,9 +48,10 @@ bool ofxKinectV2::open(){
 //--------------------------------------------------------------------------------
 void ofxKinectV2::threadedFunction(){
     while(isThreadRunning()){
-        protonect.updateKinect(rgbPixelsBack, depthPixelsBack);
+        protonect.updateKinect(rgbPixelsBack, depthPixelsBack, irPixelsBack);
         rgbPixelsFront.swap(rgbPixelsBack);
         depthPixelsFront.swap(depthPixelsBack);
+        irPixelsFront.swap(irPixelsBack);
         
         lock();
         bNewBuffer = true;
@@ -70,6 +71,7 @@ void ofxKinectV2::update(){
         lock();
             rgbPix = rgbPixelsFront;
             rawDepthPixels = depthPixelsFront;
+            rawIrPixels = irPixelsFront;
             bNewBuffer = false;
         unlock();
         
@@ -113,6 +115,16 @@ ofFloatPixels & ofxKinectV2::getRawDepthPixels(){
 //--------------------------------------------------------------------------------
 ofPixels ofxKinectV2::getRgbPixels(){
     return rgbPix; 
+}
+
+//--------------------------------------------------------------------------------
+ofFloatPixels ofxKinectV2::getRawDepthPixels(){
+    return rawDepthPixels;
+}
+
+//--------------------------------------------------------------------------------
+ofFloatPixels ofxKinectV2::getRawIrPixels(){
+    return rawIrPixels;
 }
 
 //--------------------------------------------------------------------------------

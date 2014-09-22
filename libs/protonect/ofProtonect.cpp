@@ -720,7 +720,7 @@ int ofProtonect::openKinect(std::string binpath){
   cmd_seq = 0;
 
   uint16_t vid = 0x045E;
-  uint16_t pid = 0x02C4;
+  uint16_t pid[2] = {0x02d8, 0x02C4};
   uint16_t mi = 0x00;
 
   bool debug_mode = false;
@@ -738,27 +738,33 @@ int ofProtonect::openKinect(std::string binpath){
 
   libusb_set_debug(NULL, debug_mode ? LIBUSB_LOG_LEVEL_DEBUG : LIBUSB_LOG_LEVEL_INFO);
 
-  printf("Opening device %04X:%04X...\n", vid, pid);
+  for(int i = 0; i < 2; i++){
+      printf("Trying to open device %04X:%04X...\n", vid, pid[i]);
 
   handle = NULL;
   int tryCount = 4;
   if (handle == NULL){
     while(tryCount > 0 && handle == NULL){
-        handle = libusb_open_device_with_vid_pid(NULL, vid, pid);
+                handle = libusb_open_device_with_vid_pid(NULL, vid, pid[i]);
         tryCount--;
         ofSleepMillis(100);
         
         if( handle ){
           libusb_reset_device(handle);
           ofSleepMillis(100);
-          handle = libusb_open_device_with_vid_pid(NULL, vid, pid);
-        }
-    }
+                  handle = libusb_open_device_with_vid_pid(NULL, vid, pid[i]);
+                }
+            }
+      }
+      if(handle !=  NULL){
+        break;
+      }
+  }
+  
     if( handle == NULL ){
         perr("ofProtonect::openKinect  Failed. - handle is NULL\n");
         return -1;
     }
-  }
 
   dev = libusb_get_device(handle);
   bus = libusb_get_bus_number(dev);
@@ -837,12 +843,16 @@ int ofProtonect::openKinect(std::string binpath){
 
   depth_iso_transfers = new libfreenect2::usb::IsoTransferPool(handle, 0x84);
   
-  depth_processor = new libfreenect2::CpuDepthPacketProcessor();
+//  depth_processor = new libfreenect2::CpuDepthPacketProcessor();
+//  depth_processor->setFrameListener(frame_listener);
+//  depth_processor->load11To16LutFromFile((binpath + "11to16.bin").c_str());
+//  depth_processor->loadXTableFromFile((binpath + "xTable.bin").c_str());
+//  depth_processor->loadZTableFromFile((binpath + "zTable.bin").c_str());
+    
+  depth_processor = new libfreenect2::ofGpuDepthPacketProcessor();
   depth_processor->setFrameListener(frame_listener);
-  depth_processor->load11To16LutFromFile((binpath + "11to16.bin").c_str());
-  depth_processor->loadXTableFromFile((binpath + "xTable.bin").c_str());
-  depth_processor->loadZTableFromFile((binpath + "zTable.bin").c_str());
-
+  depth_processor->start();
+    
   depth_packet_stream_parser = new libfreenect2::DepthPacketStreamParser(depth_processor); 
 
   size_t max_packet_size = libusb_get_max_iso_packet_size(dev, 0x84);
@@ -878,7 +888,7 @@ void ofProtonect::exit(ofEventArgs & args){
     closeKinect();
 }
 
-void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels){
+void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels, ofFloatPixels & irPixels){
     if( bOpened ){
         
         ofLogVerbose() << " updateKinect " << endl;
@@ -893,6 +903,7 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         
         rgbPixels.setFromPixels(rgb->data, rgb->width, rgb->height, 3);
         depthPixels.setFromPixels((float *)depth->data, ir->width, ir->height, 1);
+        irPixels.setFromPixels((float *)ir->data, ir->width, ir->height, 1);
 
         frame_listener->release(frames);
   }
@@ -911,8 +922,8 @@ int ofProtonect::closeKinect(){
 
     rgb_bulk_transfers->cancel();
     depth_iso_transfers->cancel();
-    
-
+    depth_processor->stop();
+     
     CloseKinect(handle);
 
     // wait for all transfers to cancel
