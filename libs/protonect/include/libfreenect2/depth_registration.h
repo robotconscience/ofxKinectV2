@@ -19,6 +19,8 @@
 #ifndef __DEPTH_REGISTRATION_H__
 #define __DEPTH_REGISTRATION_H__
 
+#define DEPTH_REG_CPU
+
 #include <vector>
 
 #include <opencv2/opencv.hpp>

@@ -6,6 +6,7 @@
 //
 
 #include "ofProtonect.h"
+#include "ofxCv.h"
 
 
 /*
@@ -709,6 +710,7 @@ ofProtonect::ofProtonect(){
     depth_packet_stream_parser = NULL;
     rgb_processor = NULL;
     bOpened = false;
+    depthReg = NULL;
     
     ofAddListener(ofEvents().exit, this, &ofProtonect::exit);
 }
@@ -897,13 +899,59 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         
         if( bOpened == false )return;
 
-        libfreenect2::Frame *rgb = frames[libfreenect2::Frame::Color];
-        libfreenect2::Frame *ir = frames[libfreenect2::Frame::Ir];
-        libfreenect2::Frame *depth = frames[libfreenect2::Frame::Depth];
+        libfreenect2::Frame *rgb_frame = frames[libfreenect2::Frame::Color];
+        libfreenect2::Frame *ir_frame = frames[libfreenect2::Frame::Ir];
+        libfreenect2::Frame *depth_frame = frames[libfreenect2::Frame::Depth];
         
-        rgbPixels.setFromPixels(rgb->data, rgb->width, rgb->height, 3);
-        depthPixels.setFromPixels((float *)depth->data, ir->width, ir->height, 1);
-        irPixels.setFromPixels((float *)ir->data, ir->width, ir->height, 1);
+        // hm...
+        cv::Mat rgb = cv::Mat(rgb_frame->height, rgb_frame->width, CV_8UC3, rgb_frame->data);
+        cv::Mat ir = cv::Mat(ir_frame->height, ir_frame->width, CV_32FC1, ir_frame->data) / 20000.0f;
+        cv::Mat depth = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1, depth_frame->data) / 4500.0f;
+        cv::Mat scaled = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1);
+        
+        // do depth reg
+        if(depth.rows != rgb.rows || depth.cols != rgb.cols)
+        {
+            if(depthReg == NULL)
+            {
+                depthReg = DepthRegistration::New(cv::Size(rgb.cols, rgb.rows),
+                                                  cv::Size(depth.cols, depth.rows),
+                                                  cv::Size(depth.cols, depth.rows),
+                                                  0.5f, 20.0f, 0.015f, DepthRegistration::CPU);
+                
+                cv::Mat cameraMatrixColor, cameraMatrixDepth;
+                cameraMatrixColor = cv::Mat::zeros(3, 3, CV_64F);
+                cameraMatrixDepth = cv::Mat::zeros(3, 3, CV_64F);
+                depthReg->ReadDefaultCameraInfo(cameraMatrixColor, cameraMatrixDepth);
+                
+                depthReg->init(cameraMatrixColor, cameraMatrixDepth,
+                               cv::Mat::eye(3, 3, CV_64F), cv::Mat::zeros(1, 3, CV_64F),
+                               cv::Mat::zeros(depth.rows, depth.cols, CV_32F),
+                               cv::Mat::zeros(depth.rows, depth.cols, CV_32F));
+                
+//                bflag=true;
+            }
+            
+            if ( depthReg != NULL) depthReg->depthToRGBResolution(depth, scaled);
+        }
+        else
+        {
+            scaled = depth;
+        }
+        
+//        ofxCv::toOf(rgb, rgbPixels);
+//        ofxCv::toOf(scaled, depthPixels);
+//        ofxCv::toOf(ir, irPixels);
+        
+//        cout << rgbPixels.size() << endl;
+        rgbPixels.setFromPixels(rgb.ptr<unsigned char>(), rgb.cols, rgb.rows, rgb.channels());
+        depthPixels.setFromPixels(scaled.ptr<float>(), scaled.cols, scaled.rows, scaled.channels());
+        irPixels.setFromPixels(ir.ptr<float>(), ir.cols, ir.rows, ir.channels());
+//        rgbPixels.setFromPixels(rgb_frame->data, rgb_frame->width, rgb_frame->height, 3);
+        
+        //depth
+        //depthPixels.setFromPixels((float *)depth->data, ir->width, ir->height, 1);
+        //irPixels.setFromPixels((float *)ir_frame->data, ir_frame->width, ir_frame->height, 1);
 
         frame_listener->release(frames);
   }

@@ -17,6 +17,8 @@
 #include "ofRGBPacketProcessor.h"
 #include "ofGpuDepthPacketProcessor.h"
 
+#include <libfreenect2/depth_registration.h>
+
 #include "ofAppGLFWWindow.h"
 #include "ofAppRunner.h"
 
@@ -43,7 +45,9 @@ class ofProtonect{
         libfreenect2::usb::EventLoop usb_loop;
         libusb_device *dev;
         libusb_context *usb_context_;
-
+    
+        DepthRegistration *depthReg;
+    
         libfreenect2::ofRGBPacketProcessor  * rgb_processor;
 
         libfreenect2::usb::BulkTransferPool * rgb_bulk_transfers;
