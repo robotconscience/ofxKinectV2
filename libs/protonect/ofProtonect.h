@@ -13,7 +13,7 @@
 #include <libfreenect2/rgb_packet_stream_parser.h>
 #include <libfreenect2/rgb_packet_processor.h>
 #include <libfreenect2/depth_packet_stream_parser.h>
-#include <libfreenect2/frame_listener.h>
+#include <libfreenect2/frame_listener_impl.h>
 #include "ofRGBPacketProcessor.h"
 #include "ofGpuDepthPacketProcessor.h"
 
@@ -36,12 +36,13 @@ class ofProtonect{
         bool bOpened;
     
         libfreenect2::FrameMap frames;
-        libfreenect2::FrameListener * frame_listener;
+        libfreenect2::SyncMultiFrameListener * frame_listener;
         libfreenect2::usb::IsoTransferPool * depth_iso_transfersPtr = NULL;
         libfreenect2::usb::BulkTransferPool * rgb_bulk_transfersPtr = NULL;
         libusb_device_handle *handle;
         libfreenect2::usb::EventLoop usb_loop;
         libusb_device *dev;
+        libusb_context *usb_context_;
 
         libfreenect2::ofRGBPacketProcessor  * rgb_processor;
 

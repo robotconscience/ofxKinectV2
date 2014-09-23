@@ -259,12 +259,12 @@ namespace libfreenect2{
         
         if(has_listener)
         {
-            if(listener_->addNewFrame(Frame::Ir, ir_frame))
+            if(listener_->onNewFrame(Frame::Ir, ir_frame))
             {
                 newIrFrame();
             }
             
-            if(listener_->addNewFrame(Frame::Depth, depth_frame))
+            if(listener_->onNewFrame(Frame::Depth, depth_frame))
             {
                 newDepthFrame();
             }

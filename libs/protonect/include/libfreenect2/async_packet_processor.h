@@ -28,7 +28,6 @@
 #define ASYNC_PACKET_PROCESSOR_H_
 
 #include <libfreenect2/threading.h>
-#include <iostream>
 
 namespace libfreenect2
 {
@@ -103,6 +102,7 @@ private:
       {
         // invoke process impl
         processor_->process(current_packet_);
+
         current_packet_available_ = false;
       }
     }

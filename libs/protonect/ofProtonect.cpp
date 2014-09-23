@@ -824,11 +824,11 @@ int ofProtonect::openKinect(std::string binpath){
   signal(SIGINT,sigint_handler);
   shutdown = false;
 
-  usb_loop.start();
+  usb_loop.start(usb_context_);
   
   //INITIALIZE OBJECTS
   
-  frame_listener = new libfreenect2::FrameListener(libfreenect2::Frame::Color | libfreenect2::Frame::Ir | libfreenect2::Frame::Depth);
+  frame_listener = new libfreenect2::SyncMultiFrameListener(libfreenect2::Frame::Color | libfreenect2::Frame::Ir | libfreenect2::Frame::Depth);
   rgb_bulk_transfers = new libfreenect2::usb::BulkTransferPool(handle, 0x83);
   
   rgb_processor = new libfreenect2::ofRGBPacketProcessor();
