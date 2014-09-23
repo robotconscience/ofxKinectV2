@@ -165,6 +165,12 @@
 		01E26EA019D1C049006A7675 /* usb_control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = usb_control.cpp; path = ../libs/protonect/src/usb_control.cpp; sourceTree = "<group>"; };
 		01E26EBF19D1C539006A7675 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = ../../../../../../../../../System/Library/Frameworks/OpenCL.framework; sourceTree = "<group>"; };
 		01E26EC219D1C643006A7675 /* cl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cl.hpp; sourceTree = "<group>"; };
+		01E26EC619D1D40F006A7675 /* pointCloud.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = pointCloud.frag; sourceTree = "<group>"; };
+		01E26EC719D1D40F006A7675 /* pointCloud.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = pointCloud.vert; sourceTree = "<group>"; };
+		01E26EC819D1D40F006A7675 /* pointCloud.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = pointCloud.frag; sourceTree = "<group>"; };
+		01E26EC919D1D40F006A7675 /* pointCloud.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = pointCloud.vert; sourceTree = "<group>"; };
+		01E26ECA19D1D40F006A7675 /* stage1.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = stage1.fs; sourceTree = "<group>"; };
+		01E26ECB19D1D40F006A7675 /* stage2.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = stage2.fs; sourceTree = "<group>"; };
 		03A75A648BC4CF1D9DEDD0CE /* Flow.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Flow.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Flow.cpp; sourceTree = SOURCE_ROOT; };
 		057122A817D12571F8C0C7A4 /* ofxCvGrayscaleImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxCvGrayscaleImage.cpp; path = ../../../addons/ofxOpenCv/src/ofxCvGrayscaleImage.cpp; sourceTree = SOURCE_ROOT; };
 		087522EA37A32B8D902CAB64 /* core_c.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = core_c.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/core_c.h; sourceTree = SOURCE_ROOT; };
@@ -450,6 +456,28 @@
 			);
 			name = opencl;
 			path = ../libs/opencl;
+			sourceTree = "<group>";
+		};
+		01E26EC419D1D40F006A7675 /* shader */ = {
+			isa = PBXGroup;
+			children = (
+				01E26EC519D1D40F006A7675 /* gl3 */,
+				01E26EC819D1D40F006A7675 /* pointCloud.frag */,
+				01E26EC919D1D40F006A7675 /* pointCloud.vert */,
+				01E26ECA19D1D40F006A7675 /* stage1.fs */,
+				01E26ECB19D1D40F006A7675 /* stage2.fs */,
+			);
+			name = shader;
+			path = bin/data/shader;
+			sourceTree = SOURCE_ROOT;
+		};
+		01E26EC519D1D40F006A7675 /* gl3 */ = {
+			isa = PBXGroup;
+			children = (
+				01E26EC619D1D40F006A7675 /* pointCloud.frag */,
+				01E26EC719D1D40F006A7675 /* pointCloud.vert */,
+			);
+			path = gl3;
 			sourceTree = "<group>";
 		};
 		0478E60892BF4C0731AE0763 /* ts */ = {
@@ -1058,6 +1086,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				01E26EC419D1D40F006A7675 /* shader */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,

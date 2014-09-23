@@ -906,7 +906,7 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         // hm...
         cv::Mat rgb = cv::Mat(rgb_frame->height, rgb_frame->width, CV_8UC3, rgb_frame->data);
         cv::Mat ir = cv::Mat(ir_frame->height, ir_frame->width, CV_32FC1, ir_frame->data) / 20000.0f;
-        cv::Mat depth = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1, depth_frame->data) / 4500.0f;
+        cv::Mat depth = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1, depth_frame->data);
         cv::Mat scaled = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1);
         
         // do depth reg
@@ -932,18 +932,21 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
 //                bflag=true;
             }
             
-            if ( depthReg != NULL) depthReg->depthToRGBResolution(depth, scaled);
+            depthReg->depthToRGBResolution(depth, scaled);
         }
         else
         {
             scaled = depth;
         }
         
-//        ofxCv::toOf(rgb, rgbPixels);
-//        ofxCv::toOf(scaled, depthPixels);
-//        ofxCv::toOf(ir, irPixels);
-        
 //        cout << rgbPixels.size() << endl;
+//        scaled *= 4500.0f;
+        cv::Size size(1280,720);//the dst image size,e.g.100x100
+        resize(rgb,rgb,size);//resize image
+        resize(ir,ir,size);//resize image
+        resize(depth,depth,size);//resize image
+        resize(scaled,scaled,size);//resize image
+        
         rgbPixels.setFromPixels(rgb.ptr<unsigned char>(), rgb.cols, rgb.rows, rgb.channels());
         depthPixels.setFromPixels(scaled.ptr<float>(), scaled.cols, scaled.rows, scaled.channels());
         irPixels.setFromPixels(ir.ptr<float>(), ir.cols, ir.rows, ir.channels());
