@@ -20,3 +20,15 @@ Notes:
 
 
 Huge thanks to @christiankerl for a lot of the recent changes that made this work well on OS X. 
+
+OPENCL notes
+===========
+* OpenCL only tested on OS X (sorry)
+* to get OpenCL working, right now you must install dependencies via this branch of libfreenect2: https://github.com/dorian3d/libfreenect2
+``` cd /anywhere
+    git clone https://github.com/dorian3d/libfreenect2.git
+    cd libfreenect2
+    sh depends/install_mac.sh
+```
+* this will patch your OpenCL and install eigen3
+* that should be it... if it doesn't work, you may have to run through the entire libfreenect2 build process....
