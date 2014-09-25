@@ -42,6 +42,6 @@ void main()
     if ( position.z < 50.0 ){
         discard;
     } else {
-        gl_FragColor = texColor;
+        gl_FragColor = gl_Color;
     }
 }

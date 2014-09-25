@@ -172,7 +172,7 @@ public:
   OpenCLDepthPacketProcessor();
   virtual ~OpenCLDepthPacketProcessor();
   virtual void setConfiguration(const libfreenect2::DepthPacketProcessor::Config &config);
-
+    
   virtual void loadP0TablesFromCommandResponse(unsigned char* buffer, size_t buffer_length);
 
   /**
@@ -186,6 +186,10 @@ public:
   void load11To16LutFromFile(const char* filename);
 
   virtual void process(const DepthPacket &packet);
+    
+    // hacky...
+    const char * cl_source;
+    
 private:
   OpenCLDepthPacketProcessorImpl *impl_;
 };

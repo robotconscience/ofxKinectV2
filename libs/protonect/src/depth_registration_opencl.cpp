@@ -171,6 +171,9 @@ bool DepthRegistrationOpenCL::init()
   }
 
   cv::initUndistortRectifyMap(cameraMatrixDepth, cv::Mat(), cv::Mat(), cameraMatrixColor, sizeColor, CV_16SC2, map1, map2);
+//    
+//    std::cout<<map1.type()<<":"<<CV_32FC2<<":"<<CV_16SC2<<std::endl;
+    
   return true;
 }
 

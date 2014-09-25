@@ -41,6 +41,8 @@
 #include <libfreenect2/protocol/response.h>
 #include <libfreenect2/protocol/command_transaction.h>
 
+#include "ofMain.h"
+
 namespace libfreenect2
 {
 using namespace libfreenect2;
@@ -355,9 +357,9 @@ Freenect2DeviceImpl::Freenect2DeviceImpl(Freenect2Impl *context, libusb_device *
   rgb_transfer_pool_.setCallback(&rgb_packet_parser_);
   ir_transfer_pool_.setCallback(&depth_packet_parser_);
 
-  depth_packet_processor_.load11To16LutFromFile("11to16.bin");
-  depth_packet_processor_.loadXTableFromFile("xTable.bin");
-  depth_packet_processor_.loadZTableFromFile("zTable.bin");
+  depth_packet_processor_.load11To16LutFromFile("11to16.bin");//.c_str());
+  depth_packet_processor_.loadXTableFromFile("xTable.bin");//, true).c_str());
+  depth_packet_processor_.loadZTableFromFile("zTable.bin");//, true).c_str());
 }
 
 Freenect2DeviceImpl::~Freenect2DeviceImpl()
@@ -503,6 +505,7 @@ void Freenect2DeviceImpl::start()
   ir_camera_params_.p2 = ir_p->p2;
 
   command_tx_.execute(ReadP0TablesCommand(nextCommandSeq()), result);
+    depth_packet_processor_.cl_source = "src/opencl_depth_packet_processor.cl";//, true).c_str();
   depth_packet_processor_.loadP0TablesFromCommandResponse(result.data, result.length);
 
   command_tx_.execute(ReadRgbCameraParametersCommand(nextCommandSeq()), result);

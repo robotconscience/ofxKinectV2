@@ -906,7 +906,7 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         // hm...
         cv::Mat rgb = cv::Mat(rgb_frame->height, rgb_frame->width, CV_8UC3, rgb_frame->data);
         cv::Mat ir = cv::Mat(ir_frame->height, ir_frame->width, CV_32FC1, ir_frame->data) / 20000.0f;
-        cv::Mat depth = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1, depth_frame->data);
+        cv::Mat depth = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1, depth_frame->data) / 4500.0f;
         cv::Mat scaled = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1);
         
         // do depth reg
@@ -941,7 +941,7 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         
 //        cout << rgbPixels.size() << endl;
 //        scaled *= 4500.0f;
-        cv::Size size(1280,720);//the dst image size,e.g.100x100
+        cv::Size size(640,480);//the dst image size,e.g.100x100
         resize(rgb,rgb,size);//resize image
         resize(ir,ir,size);//resize image
         resize(depth,depth,size);//resize image

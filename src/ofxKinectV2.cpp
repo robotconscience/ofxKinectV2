@@ -84,7 +84,7 @@ void ofxKinectV2::update(){
             unsigned char * pixels  = depthPix.getPixels();
                 
             for(int i = 0; i < depthPix.size(); i++){
-                pixels[i] = ofMap(rawDepthPixels[i], minDistance, maxDistance, 255, 0, true);
+                pixels[i] = ofMap(rawDepthPixels[i], minDistance / 4500.0f, maxDistance/ 4500.0f, 255, 0, true);
                 if( pixels[i] == 255 ){
                     pixels[i] = 0;
                 }

@@ -36,6 +36,8 @@ struct ResourceDescriptor
   size_t length;
 };
 
+#define RESOURCES_INC
+    
 #ifdef RESOURCES_INC
 #include "resources.inc"
 #else

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "ofProtonect.h"
+#include "ofProtonect2.h"
 #include "ofMain.h"
 
 class ofxKinectV2 : public ofThread{

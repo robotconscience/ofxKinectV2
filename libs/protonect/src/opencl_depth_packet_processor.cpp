@@ -44,6 +44,8 @@
 #define REG_OPENCL_FILE ""
 #endif
 
+//#include "ofMain.h"
+
 namespace libfreenect2
 {
 
@@ -93,7 +95,7 @@ public:
   cl_float3 p0_table[512 * 424];
   libfreenect2::DepthPacketProcessor::Config config;
   DepthPacketProcessor::Parameters params;
-
+    
   double timing_acc;
   double timing_acc_n;
 
@@ -222,14 +224,15 @@ public:
     options = oss.str();
   }
 
-  bool init()
+    bool init( const char * source )
   {
     if(isInitialized)
     {
       return true;
     }
+      
+      std::string sourceCode = std::string(source);
 
-    std::string sourceCode;
     if(!readProgram(sourceCode))
     {
       return false;
@@ -402,7 +405,7 @@ public:
 
   bool readProgram(std::string &source) const
   {
-    source = loadCLSource(REG_OPENCL_FILE);
+    source = loadCLSource(source);
     return !source.empty();
   }
 
@@ -488,7 +491,7 @@ void OpenCLDepthPacketProcessor::loadP0TablesFromCommandResponse(unsigned char *
   }
 
   impl_->fill_trig_table(p0table);
-  impl_->init();
+  impl_->init( cl_source );
 }
 
 void OpenCLDepthPacketProcessor::loadXTableFromFile(const char *filename)
@@ -519,7 +522,7 @@ void OpenCLDepthPacketProcessor::process(const DepthPacket &packet)
 {
   bool has_listener = this->listener_ != 0;
 
-  if(!impl_->init())
+  if(!impl_->init(cl_source))
   {
     std::cerr << "could not initialize OpenCLDepthPacketProcessor" << std::endl;
     return;
