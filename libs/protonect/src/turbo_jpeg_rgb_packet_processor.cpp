@@ -32,8 +32,6 @@
 namespace libfreenect2
 {
 
-extern const bool VERBOSE;
-
 class TurboJpegRgbPacketProcessorImpl
 {
 public:
@@ -90,12 +88,8 @@ public:
 
     if(timing_acc_n >= 100.0)
     {
-      if(VERBOSE)
-      {
-        double avg = (timing_acc / timing_acc_n);
-        std::cout << "[TurboJpegRgbPacketProcessor] avg. time: "
-                  << (avg * 1000) << "ms -> ~" << (1.0/avg) << "Hz" << std::endl;
-      }
+      double avg = (timing_acc / timing_acc_n);
+      std::cout << "[TurboJpegRgbPacketProcessor] avg. time: " << (avg * 1000) << "ms -> ~" << (1.0/avg) << "Hz" << std::endl;
       timing_acc = 0.0;
       timing_acc_n = 0.0;
     }

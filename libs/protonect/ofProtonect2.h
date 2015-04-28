@@ -14,7 +14,7 @@
 #include <libfreenect2/frame_listener_impl.h>
 #include <libfreenect2/threading.h>
 
-#include <libfreenect2/depth_registration.h>
+#include <libfreenect2/registration.h>
 
 class ofProtonect
 {
@@ -40,7 +40,7 @@ protected:
     bool bOpened;
     bool bDoDepthReg;
     
-    DepthRegistration *depthReg;
+    libfreenect2::Registration *depthReg;
     bool bDepthRegStarted;
 };
 

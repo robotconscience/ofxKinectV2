@@ -3,7 +3,7 @@
 bool bCreatedPoints = false;
 bool bUseShader = true;
 bool bResetZ = true;
-
+bool bUseRegistration = false;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -38,7 +38,7 @@ void ofApp::setup(){
 void ofApp::update(){
     kinect.update();
     if( kinect.isFrameNew() ){
-        texDepth.loadData( kinect.getDepthPixels() );
+        texDepth.loadData( kinect.getRawDepthPixels() );
         texRGB.loadData( kinect.getRgbPixels() );
         
         int width = kinect.getDepthPixels().getWidth();
@@ -47,7 +47,7 @@ void ofApp::update(){
         int widthColor = texRGB.getWidth();
         int heightColor = texRGB.getHeight();
         
-        cout << width <<":"<<height << widthColor <<":"<<heightColor<<endl;
+        //cout << width <<":"<<height << widthColor <<":"<<heightColor<<endl;
         
         if ( !bCreatedPoints && kinect.getDepthPixels().getWidth() != 0){
             bCreatedPoints = true;
@@ -119,6 +119,7 @@ void ofApp::draw(){
         if (bUseShader ){
             
             pointCloudShader.begin();
+            pointCloudShader.setUniform1i("useRegistration", bUseRegistration);
             pointCloudShader.setUniformTexture("kinectColor", texRGB, 0);
             pointCloudShader.setUniformTexture("kinectDepth", texDepth, 1);
             pointCloudShader.setUniform1f("depth", extrude);
@@ -159,7 +160,10 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    if( key == 'd'){
+        bUseRegistration = !bUseRegistration;
+        kinect.setRegistration(bUseRegistration);
+    }
 }
 
 //--------------------------------------------------------------

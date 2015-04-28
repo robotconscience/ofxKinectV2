@@ -36,8 +36,6 @@ struct ResourceDescriptor
   size_t length;
 };
 
-#define RESOURCES_INC
-    
 #ifdef RESOURCES_INC
 #include "resources.inc"
 #else
@@ -47,7 +45,8 @@ ResourceDescriptor resource_descriptors[] = {};
 bool loadResource(const std::string &name, unsigned char const**data, size_t *length)
 {
   bool result = false;
-  for(int i = 0; i < sizeof(resource_descriptors); ++i)
+
+  for(int i = 0; i < resource_descriptors_length; ++i)
   {
     if(name.compare(resource_descriptors[i].filename) == 0)
     {

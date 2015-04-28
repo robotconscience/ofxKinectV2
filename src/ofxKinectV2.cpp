@@ -131,4 +131,8 @@ void ofxKinectV2::close(){
     }
 }
 
+//--------------------------------------------------------------------------------
+void ofxKinectV2::setRegistration(bool bUseRegistration){
+    protonect.doDepthRegistration(bUseRegistration);
+}
 

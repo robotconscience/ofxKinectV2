@@ -11,6 +11,7 @@ uniform float heightDepth;
 
 uniform float offsetLeft;
 uniform float offsetRight;
+uniform int useRegistration;
 
 float ofMap(float value, float inputMin, float inputMax, float outputMin, float outputMax, bool bClamp) {
     float outVal = ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
@@ -33,8 +34,10 @@ void main()
 {
     vec4 color  = gl_Color;
     vec2 texCoord       = vec2( gl_TexCoord[0].st );
-    texCoord.x          = ofMap(texCoord.x, 0.0, widthDepth, 0.0, width, true);
-    texCoord.y          = ofMap(texCoord.y, 0.0, heightDepth, 0.0, height, true);
+    if ( useRegistration == 0 ){
+        texCoord.x          = ofMap(texCoord.x, 0.0, widthDepth, 0.0, width, true);
+        texCoord.y          = ofMap(texCoord.y, 0.0, heightDepth, 0.0, height, true);
+    }
     vec4 texColor       = texture2DRect(kinectColor, texCoord);
     
     // could mix here
@@ -42,6 +45,6 @@ void main()
     if ( position.z < 50.0 ){
         discard;
     } else {
-        gl_FragColor = gl_Color;
+        gl_FragColor = texColor;
     }
 }

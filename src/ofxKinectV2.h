@@ -30,6 +30,8 @@ class ofxKinectV2 : public ofThread{
     
         ofParameter <float> minDistance;
         ofParameter <float> maxDistance;
+    
+        void setRegistration(bool bUseRegistration=false);
 
     protected:
         void threadedFunction();

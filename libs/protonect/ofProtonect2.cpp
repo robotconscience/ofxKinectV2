@@ -38,6 +38,11 @@ int ofProtonect::openKinect(std::string dataPath){
     dev->setIrAndDepthFrameListener(listener);
     dev->start();
     
+    auto ir = dev->getIrCameraParams();
+    auto color = dev->getColorCameraParams();
+    
+    depthReg = new libfreenect2::Registration(&ir, &color );
+    
     std::cout << "device serial: " << dev->getSerialNumber() << std::endl;
     std::cout << "device firmware: " << dev->getFirmwareVersion() << std::endl;
     bOpened = true;
@@ -61,49 +66,44 @@ void ofProtonect::updateKinect(ofPixels & rgbPixels, ofFloatPixels & depthPixels
         cv::Mat rgb = cv::Mat(rgb_frame->height, rgb_frame->width, CV_8UC3, rgb_frame->data);
         cv::Mat ir = cv::Mat(ir_frame->height, ir_frame->width, CV_32FC1, ir_frame->data) / 20000.0f;
         cv::Mat depth = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1, depth_frame->data) / 4500.0f;
-        cv::Mat scaled = cv::Mat(depth_frame->height, depth_frame->width, CV_32FC1);
-        
-        // do depth reg
-        if((depth.rows != rgb.rows || depth.cols != rgb.cols) && bDoDepthReg)
-        {
-            if(bDepthRegStarted == false)
-            {
-                depthReg = DepthRegistration::New(cv::Size(rgb.cols, rgb.rows),
-                                                  cv::Size(depth.cols, depth.rows),
-                                                  cv::Size(depth.cols, depth.rows),
-                                                  0.5f, 20.0f, 0.015f, DepthRegistration::CPU);
-                
-                cv::Mat cameraMatrixColor, cameraMatrixDepth;
-                cameraMatrixColor = cv::Mat::zeros(3, 3, CV_64F);
-                cameraMatrixDepth = cv::Mat::zeros(3, 3, CV_64F);
-                depthReg->ReadDefaultCameraInfo(cameraMatrixColor, cameraMatrixDepth);
-                
-                depthReg->init(cameraMatrixColor, cameraMatrixDepth,
-                               cv::Mat::eye(3, 3, CV_64F), cv::Mat::zeros(1, 3, CV_64F),
-                               cv::Mat::zeros(depth.rows, depth.cols, CV_32F),
-                               cv::Mat::zeros(depth.rows, depth.cols, CV_32F));
-                
-                bDepthRegStarted=true;
-            }
-            
-            depthReg->depthToRGBResolution(depth, scaled);
-        }
-        else
-        {
-            scaled = depth;
-        }
         
         ofxCv::convertColor(rgb, rgb, CV_BGR2RGB);
         
-        /*cv::Size size(640,480);//the dst image size,e.g.100x100
-         resize(rgb,rgb,size);//resize image
-         resize(ir,ir,size);//resize image
-         resize(depth,depth,size);//resize image
-         resize(scaled,scaled,size);//resize image*/
-        
-        rgbPixels.setFromPixels(rgb.ptr<unsigned char>(), rgb.cols, rgb.rows, rgb.channels());
-        depthPixels.setFromPixels(scaled.ptr<float>(), scaled.cols, scaled.rows, scaled.channels());
+//        rgbPixels.setFromPixels(rgb.ptr<unsigned char>(), rgb.cols, rgb.rows, rgb.channels());
         irPixels.setFromPixels(ir.ptr<float>(), ir.cols, ir.rows, ir.channels());
+        depthPixels.setFromPixels(depth.ptr<float>(), depth.cols, depth.rows, depth.channels());
+        
+        // do depth reg
+        if(bDoDepthReg)
+        {   
+            cv::Mat depthColor(424, 512, CV_8UC3);
+            
+            static bool bLogged = false;
+            
+            for (int x = 0; x < 512; x++){
+                for (int y = 0; y < 424; y++) {
+                    float cx;
+                    float cy;
+                    float z = depth.at<float>(y, x) * 4500.f;
+                    if (z == 0)
+                    {
+                        depthColor.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
+                        continue;
+                    }
+                    depthReg->apply(x, y, z, cx, cy);
+                    if (cx > 0 && cy > 0 && cx < 1920 && cy < 1080)
+                        depthColor.at<cv::Vec3b>(y, x) = rgb.at<cv::Vec3b>(cy, cx);
+//                    else
+//                        depthColor.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
+                }
+            }
+            bLogged = true;
+            rgbPixels.setFromPixels(depthColor.ptr<unsigned char>(), depthColor.cols, depthColor.rows, depthColor.channels());
+            
+        } else {
+            rgbPixels.setFromPixels(rgb.ptr<unsigned char>(), rgb.cols, rgb.rows, rgb.channels());
+        }
+        
         listener->release(frames);
     }
 }

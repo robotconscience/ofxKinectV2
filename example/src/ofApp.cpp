@@ -38,9 +38,14 @@ void ofApp::draw(){
     panel.draw();
 }
 
+bool bUseReg = false;
+
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if ( key == 'd'){
+        bUseReg = !bUseReg;
+        kinect.setRegistration(bUseReg);
+    }
 }
 
 //--------------------------------------------------------------
